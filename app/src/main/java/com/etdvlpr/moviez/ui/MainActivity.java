@@ -11,10 +11,11 @@ import com.etdvlpr.moviez.R;
 import com.etdvlpr.moviez.model.TMDBResponce;
 import com.etdvlpr.moviez.service.TMDBservice;
 import com.etdvlpr.moviez.ui.adapter.MovieListAdapter;
-
-import java.io.IOException;
+import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -33,14 +34,21 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create()).build();
         TMDBservice service = retrofit.create(TMDBservice.class);
 
-        Call<TMDBResponce> call = service.getMovieList(BuildConfig.TMDB_API_KEY, "popular");
-        try {
-            MovieListAdapter adapter = new MovieListAdapter(call.execute().body().results);
-            GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-            mRecycler.setLayoutManager(layoutManager);
-            mRecycler.setAdapter(adapter);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Call<TMDBResponce> call = service.getMovieList("popular", BuildConfig.TMDB_API_KEY);
+        call.enqueue(new Callback<TMDBResponce>() {
+            @Override
+            public void onResponse(Call<TMDBResponce> call, Response<TMDBResponce> response) {
+                MovieListAdapter adapter = new MovieListAdapter(response.body().results);
+                GridLayoutManager layoutManager = new GridLayoutManager(getBaseContext(), 3);
+                mRecycler.setLayoutManager(layoutManager);
+                mRecycler.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<TMDBResponce> call, Throwable t) {
+                Snackbar.make(mRecycler, "Connection Error.\n" + t.getMessage(), Snackbar.LENGTH_LONG)
+                        .show();
+            }
+        });
     }
 }

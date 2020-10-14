@@ -55,7 +55,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         }
 
         public void bind(Movie movie) {
-            Picasso.get().load("http://image.tmdb.org/t/p/w300" + movie.poster_path).placeholder(R.drawable.placeholder).centerCrop().into(img);
+            Picasso.get().load("https://image.tmdb.org/t/p/w300" + movie.poster_path).placeholder(R.drawable.placeholder).into(img);
             title.setText(movie.title);
         }
 

@@ -20,7 +20,7 @@ public class MovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.activity_movie);
 
-        String image_base = "http://image.tmdb.org/t/p/";
+        String image_base = "https://image.tmdb.org/t/p/";
         String image_size = "w500";
 
         Movie movie = (Movie) getIntent().getSerializableExtra("Movie");
@@ -31,6 +31,6 @@ public class MovieActivity extends AppCompatActivity {
 
         title.setText(movie.title);
         overview.setText(movie.overview);
-        Picasso.get().load(image_base + image_size + movie.poster_path).centerCrop().placeholder(R.drawable.placeholder).into(thumbImage);
+        Picasso.get().load(image_base + image_size + movie.poster_path).placeholder(R.drawable.placeholder).into(thumbImage);
     }
 }
